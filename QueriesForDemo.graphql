@@ -1,0 +1,140 @@
+query InitialHelloWorld{
+  helloWorld(sayHelloTo: "GraphQL")
+}
+
+query GetAllPeople{
+  people{
+    id
+    name
+    age
+  }
+}
+
+query GetSinglePersonUsingName{
+  singlePersonByName(personName: "Person1"){
+    id
+    name
+    age
+  }
+}
+
+query GetSomePeopleInParallelNotEfficient{
+  a: singlePersonByName(personName: "Person1")
+  {
+    id
+    name
+    age
+  }
+
+  b: singlePersonByName(personName: "Person2"){
+    id
+    name
+    age
+  }
+
+  c: singlePersonByName(personName: "Person3"){
+    id
+    name
+    age
+  }
+}
+
+query GetSomePeopleInParallelEfficient{
+  a: singlePersonByNameUsingDataLoader(personName: "Person1")
+  {
+    id
+    name
+    age
+  }
+
+  b: singlePersonByNameUsingDataLoader(personName: "Person2"){
+    id
+    name
+    age
+  }
+
+  c: singlePersonByNameUsingDataLoader(personName: "Person3"){
+    id
+    name
+    age
+  }
+}
+
+
+mutation AddANewPerson{
+  addAPerson(input:{
+  name:"Person2"
+  age:45
+  })
+  {
+    errors
+    person {
+      id
+    }
+  }
+}
+
+query GetPeopleWithPaging{
+  countries(first:1)
+  {
+    edges {
+      node {
+        id
+        name
+      }
+      cursor
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+
+query GetNextItem {
+  countries(first: 1, after: "MA==") {
+    edges {
+      node {
+        id
+        name
+      }
+      cursor
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+
+query GetCompaniesContaining2InName {
+  getCompanies(where: { name: { contains: "2" } }) {
+    nodes {
+      name
+    }
+  }
+}
+
+query SortCompaniesByEmployees {
+  getCompanies(order: [{ employees : ASC }]) {    
+    nodes{
+    name
+    employees
+    } 
+  }
+}
+
+mutation AddACompany{
+  addCompany(input: {name:"Company2", employees:100}){
+    errors    
+    company{
+        name
+        id
+      }
+    
+  }
+}

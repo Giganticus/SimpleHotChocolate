@@ -16,10 +16,15 @@ builder.Services
         b.Description("People Mutations");
     })
     .AddTypeExtension<CompanyMutation>()
+    .AddSubscriptionType(x => x.Name("Subscription"))
+    .AddTypeExtension<CompanySubscriptions>()
     .AddFiltering()
-    .AddSorting();
+    .AddSorting()
+    .AddInMemorySubscriptions();
 
 var app = builder.Build();
+app.UseWebSockets();
+app.UseRouting();
 app.MapGraphQL();
 app.UseDeveloperExceptionPage();
 app.MapGet("/", () => "Hello World!");

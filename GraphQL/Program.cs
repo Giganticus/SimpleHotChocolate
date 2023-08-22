@@ -16,8 +16,10 @@ builder.Services
         b.Description("People Mutations");
     })
     .AddTypeExtension<CompanyMutation>()
+    .AddTypeExtension<QueryOrMutation>()
     .AddSubscriptionType(x => x.Name("Subscription"))
     .AddTypeExtension<CompanySubscriptions>()
+    .AddType<CompanyType>()
     .AddFiltering()
     .AddSorting()
     .AddInMemorySubscriptions();

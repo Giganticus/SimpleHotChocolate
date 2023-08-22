@@ -1,4 +1,5 @@
 ﻿using System;
+using HotChocolate;
 
 namespace GraphQL;
 
@@ -14,6 +15,7 @@ public class Person
         Age = age;
     }
 
+    [GraphQLDescription("Id of person")]
     public Guid Id { get; }
     public string Name { get;  }
     

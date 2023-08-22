@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using HotChocolate.Data;
 using HotChocolate.Types;
 
@@ -24,15 +23,11 @@ public class Company
 
 public class CompanyType : ObjectType<Company>
 {
-    private readonly Company[] _companies =
-        { new Company(1, "Company1", 10000), new Company(2, "Company2", 2000), new Company(3, "Company3", 30000) };
-
     protected override void Configure(IObjectTypeDescriptor<Company> descriptor)
     {
         descriptor
             .ImplementsNode()
-            .IdField(x => x.Id)
-            .ResolveNode((ctx, id) => Task.FromResult(_companies.SingleOrDefault(x => x.Id.Equals(id))));
+            .IdField(x => x.Id);
     }
 }
 
@@ -47,8 +42,10 @@ public class CompanyQueries
             new Company(22, "Company22", 220000)
         };
 
+
+    //We need to think about dangers of exposing this IEnumerable to the outside world - limit execution time, result size, response size
     [UsePaging]
     [UseFiltering]
     [UseSorting]
-    public IQueryable<Company> GetCompanies => _companies.AsQueryable();
+    public IEnumerable<Company> GetCompanies => _companies;
 }

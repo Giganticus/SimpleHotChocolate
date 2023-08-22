@@ -13,7 +13,7 @@ builder.Services
     .AddMutationType<PersonMutations>(b =>
     {
         b.Name("Mutation");
-        b.Description("People Mutations");
+        b.Description("You can add notation to the schema using code");
     })
     .AddTypeExtension<CompanyMutation>()
     .AddTypeExtension<QueryOrMutation>()

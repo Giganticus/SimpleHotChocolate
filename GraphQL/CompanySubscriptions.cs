@@ -14,5 +14,5 @@ public class CompanySubscriptions
     [Subscribe]
     [Topic]
     public Task<Company> OnCompanyAdded(
-        [EventMessage] int companyId) => Task.FromResult(_companies.Single(x => x.Id.Equals(companyId)));
+        [EventMessage] string companyName) => Task.FromResult(_companies.Single(x => x.Name.Equals(companyName)));
 }

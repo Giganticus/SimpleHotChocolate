@@ -27,7 +27,7 @@ public class CompanyMutation
 
         await eventSender.SendAsync(
             nameof(CompanySubscriptions.OnCompanyAdded),
-            company.Id);
+            company.Name);
         
         return new CompanyPayload(company);
     }

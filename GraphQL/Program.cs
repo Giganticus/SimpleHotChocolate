@@ -20,8 +20,10 @@ builder.Services
     .AddSubscriptionType(x => x.Name("Subscription"))
     .AddTypeExtension<CompanySubscriptions>()
     .AddType<CompanyType>()
+    .AddType<CountryType>()
     .AddFiltering()
     .AddSorting()
+    .AddGlobalObjectIdentification()    
     .AddInMemorySubscriptions();
 
 var app = builder.Build();

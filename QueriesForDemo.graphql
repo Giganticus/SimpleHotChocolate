@@ -1,59 +1,19 @@
-query InitialHelloWorld{
+query InitialHelloWorld {
   helloWorld(sayHelloTo: "GraphQL")
 }
 
-query GetAllPeople{
-  people{
-    id
-    name
-    age
-  }
+query ManyHellos {
+  a: helloWorld(sayHelloTo: "GraphQL")
+  b: helloWorld(sayHelloTo: "BananaCakePop")
 }
 
-query GetSinglePersonUsingName{
-  singlePersonByName(personName: "Person1"){
-    id
-    name
-    age
-  }
+mutation ManyHellos2 {
+  a: anotherHelloWorld(sayHelloTo: "GraphQL")
+  b: anotherHelloWorld(sayHelloTo: "BananaCakePop")
 }
 
-query GetSomePeopleInParallelNotEfficient{
-  a: singlePersonByName(personName: "Person1")
-  {
-    id
-    name
-    age
-  }
-
-  b: singlePersonByName(personName: "Person2"){
-    id
-    name
-    age
-  }
-
-  c: singlePersonByName(personName: "Person3"){
-    id
-    name
-    age
-  }
-}
-
-query GetSomePeopleInParallelEfficient{
-  a: singlePersonByNameUsingDataLoader(personName: "Person1")
-  {
-    id
-    name
-    age
-  }
-
-  b: singlePersonByNameUsingDataLoader(personName: "Person2"){
-    id
-    name
-    age
-  }
-
-  c: singlePersonByNameUsingDataLoader(personName: "Person3"){
+query GetAllPeople {
+  people {
     id
     name
     age
@@ -61,22 +21,97 @@ query GetSomePeopleInParallelEfficient{
 }
 
 
-mutation AddANewPerson{
-  addAPerson(input:{
-  name:"Person2"
-  age:45
-  })
-  {
-    errors
-    person {
-      id
+query GetAllPeopleWithInterests {
+  people {
+    id
+    name
+    age
+    interests{
+      description
     }
   }
 }
 
-query GetPeopleWithPaging{
-  countries(first:1)
-  {
+
+fragment PersonFragment on Person{
+  id
+  name  
+}
+
+query GetAllPeopleWithFragment {
+  people{
+  ...PersonFragment
+}}
+
+
+query GetSinglePersonUsingName {
+  singlePersonByName(personName: "Person1") {
+    id
+    name
+    age
+  }
+}
+
+query GetSomePeopleInParallelNotEfficient {
+  a: singlePersonByName(personName: "Person1") {
+    id
+    name
+    age
+  }
+
+  b: singlePersonByName(personName: "Person2") {
+    id
+    name
+    age
+  }
+
+  c: singlePersonByName(personName: "Person3") {
+    id
+    name
+    age
+  }
+}
+
+query GetSomePeopleInParallelEfficient {
+  a: singlePersonByNameUsingDataLoader(personName: "Person1") {
+    id
+    name
+    age
+  }
+
+  b: singlePersonByNameUsingDataLoader(personName: "Person2") {
+    id
+    name
+    age
+  }
+
+  c: singlePersonByNameUsingDataLoader(personName: "Person3") {
+    id
+    name
+    age
+  }
+}
+
+query GetManyPeopleByName {
+  peopleByName(names: ["Person1", "Person2"]) {
+    id
+    name
+    age
+  }
+}
+
+mutation AddANewPerson {
+  addAPerson(input: { name: "Person1", age: 45 }) {
+    errors
+    person {
+      id
+      name
+    }
+  }
+}
+
+query GetFirstCountry { 
+  countries(first: 1) {
     edges {
       node {
         id
@@ -93,12 +128,30 @@ query GetPeopleWithPaging{
   }
 }
 
-query GetNextItem {
+query GetNextCountry {
   countries(first: 1, after: "MA==") {
     edges {
       node {
         id
         name
+      }
+      cursor
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+
+query GetAllCountries {
+  countries {
+    edges {
+      node {
+        id
+        name       
       }
       cursor
     }
@@ -120,21 +173,20 @@ query GetCompaniesContaining2InName {
 }
 
 query SortCompaniesByEmployees {
-  getCompanies(order: [{ employees : ASC }]) {    
-    nodes{
-    name
-    employees
-    } 
+  getCompanies(order: [{ employees: ASC }]) {
+    nodes {
+      name
+      employees
+    }
   }
 }
 
-mutation AddACompany{
-  addCompany(input: {name:"Company2", employees:100}){
-    errors    
-    company{
-        name
-        id
-      }
-    
+mutation AddACompany {
+  addCompany(input: { name: "Company1", employees: 100 }) {
+    errors
+    company {
+      name
+      id
+    }
   }
 }

@@ -28,7 +28,10 @@ var app = builder.Build();
 app.UseWebSockets();
 app.UseRouting();
 app.MapGraphQL();
+app.MapGraphQLVoyager();
+
 app.UseDeveloperExceptionPage();
 app.MapGet("/", () => "Hello World!");
+
 
 app.Run();

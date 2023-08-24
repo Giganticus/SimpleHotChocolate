@@ -5,8 +5,7 @@ using HotChocolate.Types;
 
 namespace GraphQL;
 
-[ExtendObjectType(Name = "Subscription")]
-public class CompanySubscriptions
+public class Subscriptions
 {
     private readonly Company[] _companies =
     {

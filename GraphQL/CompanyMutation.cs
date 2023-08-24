@@ -26,7 +26,7 @@ public class CompanyMutation
         _companies.Add(company);
 
         await eventSender.SendAsync(
-            nameof(CompanySubscriptions.OnCompanyAdded),
+            nameof(Subscriptions.OnCompanyAdded),
             company.Name);
         
         return new CompanyPayload(company);

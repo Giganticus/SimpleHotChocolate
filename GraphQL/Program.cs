@@ -1,4 +1,6 @@
+using System.IO;
 using GraphQL;
+using HotChocolate.Execution;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -26,6 +28,10 @@ builder.Services
     .AddInMemorySubscriptions();
 
 var app = builder.Build();
+
+var executor = await app.Services.GetRequestExecutorAsync();
+await File.WriteAllTextAsync("schema.graphql", executor.Schema.ToString());
+
 app.UseWebSockets();
 app.UseRouting();
 app.MapGraphQL();

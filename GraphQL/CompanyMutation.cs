@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using HotChocolate;
 using HotChocolate.Language;
 using HotChocolate.Subscriptions;
 using HotChocolate.Types;
+using HotChocolate.Types.Descriptors;
+using DirectiveLocation = HotChocolate.Types.DirectiveLocation;
 
 namespace GraphQL;
 
@@ -14,6 +17,8 @@ public class CompanyMutation
 {
     private readonly List<Company> _companies = new ();
     private int _count = 0;
+    
+    
     public async Task<CompanyPayload> AddCompany(
         AddCompanyInput input,
         [Service] ITopicEventSender eventSender)
@@ -37,7 +42,8 @@ public class CompanyMutation
 
 public class AddCompanyInput
 {
-    [GraphQLType(typeof(StringLimitedToFiveCharactersType))]
+    //[GraphQLType(typeof(StringLimitedToFiveCharactersType))]
+    //[LengthLimit(length:5)]
     public string Name { get; }
     public int Employees { get; }
 
@@ -157,5 +163,63 @@ public class StringLimitedToFiveCharactersType : ScalarType
         }
 
         return false;
+    }
+}
+
+[DirectiveType(DirectiveLocation.FieldDefinition)]    
+[LengthLimitMiddleware]
+public class LengthLimitDirective
+{
+    public int Length { get; }
+
+    public LengthLimitDirective(int length)
+    {
+        Length = length;
+    }
+}
+
+public class LengthLimitAttribute : ObjectFieldDescriptorAttribute
+{
+    public int Length { get; }
+
+    public LengthLimitAttribute(int length)
+    {
+        Length = length;
+    }
+    
+    protected override void OnConfigure(
+        IDescriptorContext context, 
+        IObjectFieldDescriptor descriptor, 
+        MemberInfo member)
+    {
+        descriptor.Directive(new LengthLimitDirective(Length));
+    }
+}
+
+public class LengthLimitMiddlewareAttribute : DirectiveTypeDescriptorAttribute
+{
+    protected override void OnConfigure(
+        IDescriptorContext context, 
+        IDirectiveTypeDescriptor descriptor, 
+        Type type)
+    {
+        descriptor.Use((next, directive) =>
+        {
+            var dir = directive.AsValue<LengthLimitDirective>();
+            return async context =>
+            {
+                // if (value is within limit)
+                // {
+                //     await next(context);
+                // }
+                // else
+                // {
+                //     context.ReportError("Field value is too long");
+                // }
+
+                //somehow check the value here.
+                await next(context);
+            };
+        });
     }
 }

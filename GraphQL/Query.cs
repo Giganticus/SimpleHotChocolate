@@ -13,7 +13,7 @@ public class Query
 [ExtendObjectType("Mutation")]
 public class QueryOrMutation
 {
-    public string GetAnotherHelloWorld(string sayHelloTo)
+    public string  GetAnotherHelloWorld(string sayHelloTo)
     {
         return $"Hello {sayHelloTo}";
     }

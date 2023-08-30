@@ -7,7 +7,10 @@ namespace GraphQL;
 public class Company
 {
     public int Id { get; }
+    
+    [LengthLimit(10)]
     public string Name { get; }
+    
     public int Employees { get; }
 
     public Company(

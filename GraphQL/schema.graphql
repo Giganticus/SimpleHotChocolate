@@ -76,7 +76,7 @@ type Interest {
 type Mutation {
   addAPerson(input: AddPersonInput!): AddPersonPayload!
   addCompany(input: AddCompanyInput!): CompanyPayload!
-  anotherHelloWorld(sayHelloTo: String!): String!
+  yetAnotherHelloWorld(sayHelloTo: String!): String!
 }
 
 "Information about pagination in a connection."

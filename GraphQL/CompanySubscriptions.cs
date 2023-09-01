@@ -11,7 +11,9 @@ public class Subscriptions
     {
         new Company(1, "Company1", 10000), 
         new Company(2, "Company2", 2000), 
-        new Company(3, "Company3", 30000)
+        new Company(3, "Company3", 30000),
+        new Company(3, "Company4", 30000),
+        new Company(3, "Company5", 30000)
     };
 
     [Subscribe]
